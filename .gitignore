@@ -148,6 +148,7 @@ activemq-data/
 *.sage.py
 
 # Environments
+.artifacts
 ml_structure_base/
 .env
 .envrc
