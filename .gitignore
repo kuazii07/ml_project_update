@@ -148,9 +148,9 @@ activemq-data/
 *.sage.py
 
 # Environments
-.__pycache__
-.ipynb_checkpoints
-.catboost_info
+#.__pycache__
+#.ipynb_checkpoints
+#.catboost_info
 .artifacts
 ml_structure_base/
 .env
