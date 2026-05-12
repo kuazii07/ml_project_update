@@ -26,18 +26,19 @@ class ModelTrainer:
     def __init__(self):
         self.model_trainer_config=ModelTrainerConfig()
 
-    def initiate_model_trainer(self, train_array,test_array,preprocessor_path):
+    def initiate_model_trainer(self, train_array,test_array):
         try:
             logging.info("Spit training and test input data")
             X_train,y_train,X_test,y_test = (
                 #all columns except as cloumns
-                X_train[:,:-1],
+                train_array[:, :-1],
                 #only last column
-                y_train[:,-1],
+                train_array[:, -1],
                 #all columns except last column
-                X_test[:,:-1],
+                test_array[:, :-1],
                 #only last column
-                y_test[:,-1]
+                test_array[:, -1]
+                
             )
             #dict of models to be applied
             models={
@@ -47,7 +48,7 @@ class ModelTrainer:
                 "Linear Regression" : LinearRegression(),
                 "K-Neighbors": KNeighborsRegressor(),
                 "XGBClassifier": XGBRegressor(),
-                "Catboosting Classifier": CatBoostRegressor(),
+                "Catboosting Classifier": CatBoostRegressor(verbose=0),
                 "AdaBoost": AdaBoostRegressor()
             }
             #evaluate_models(X_train,y_train,X_test,y_test, models):
@@ -60,7 +61,7 @@ class ModelTrainer:
 
             best_model = models[best_model_name]
             
-            
+
             if best_model_score < 0.6:
                 raise CustomException ("No best model found")
             logging.info(f"Best found model on both training and test dataset")
@@ -69,6 +70,10 @@ class ModelTrainer:
                 file_path=self.model_trainer_config.trained_model_file_path,
                 obj=best_model
             )
+
+            predict = best_model.predict(X_test)
+            model_r2_score = r2_score(y_test, predict)
+            return model_r2_score
             
             
         except Exception as e:

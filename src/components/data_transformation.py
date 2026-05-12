@@ -33,9 +33,8 @@ class DataTransformation:
                 "race_ethnicity",
                 "parental_level_of_education",
                 "lunch",
-                "test_perparation_course"
-                
-            ]
+                "test_preparation_course"
+                ]
 
             num_pipeline = Pipeline(
                 #steps is a list that defines the order of operations applied to your data.
@@ -43,7 +42,7 @@ class DataTransformation:
                     #imputer to handle missing values ->replaces null with median value
                     ("imputer",SimpleImputer(strategy="median")),
                     #Standardscaler to standardize the data
-                    ("scaler", StandardScaler())
+                    ("scaler", StandardScaler(with_mean=False))
                 ]
             )
 
@@ -55,7 +54,7 @@ class DataTransformation:
                     #replaces categorical features with numerical values
                     ("one_hot_encoding",OneHotEncoder()),
                     #Standardscaler to standardize the data
-                    ("scaler",StandardScaler())
+                    ("scaler", StandardScaler(with_mean=False))
                 ]
             )
 
@@ -104,12 +103,12 @@ class DataTransformation:
             # axis =- 1 means we are dropping a column not a row.
             input_feature_train_df=train_df.drop(columns=[target_column_name], axis=1)
             
+            
             #It selects only the target column from the dataset.
             target_feature_train_df=train_df[target_column_name]
-
             #Remove target column from the dataset and keeps everything else as input features.
             # axis =- 1 means we are dropping a column not a row.
-            input_feature_test_df=test_df.drop(cloumns=[target_column_name],axis=1)
+            input_feature_test_df=test_df.drop(columns=[target_column_name],axis=1)
             #It selects only the target column from the dataset.
             target_feature_test_df=test_df[target_column_name]
 
